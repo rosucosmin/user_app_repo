@@ -7,7 +7,7 @@ import static org.junit.Assert.*;
 public class UsersRegisterTest {
 
     @Test
-    public void getUser() {
+    public void getUser() throws UserNotExistException, UserExistException {
         UsersRegister regUsers = new UsersRegister();
         regUsers.addUser(new User("Cosmin", 1960725142591L, 21));
         regUsers.addUser(new User("Dorel", 1870725142547L, 30));
@@ -21,19 +21,15 @@ public class UsersRegisterTest {
     }
 
     @Test
-    public void deleteUser() {
+    public void deleteUser() throws UserNotExistException, UserExistException {
         UsersRegister regUsers = new UsersRegister();
         regUsers.addUser(new User("Cosmin", 1960725142591L, 21));
         regUsers.addUser(new User("Dorel", 1870725142547L, 30));
         regUsers.addUser(new User("Femeie", 2940515215467L, 23));
 
-        try{
+
             regUsers.deleteUser(regUsers.getUser(1870725142547L));
-        }
-        catch (UException e)
-        {
-            e.printStackTrace();
-        }
+
 
         Integer expectedResult = 2;
         Integer actualResult = regUsers.sizeUsers();
@@ -42,7 +38,29 @@ public class UsersRegisterTest {
     }
 
     @Test
-    public void getUsersWithAgeHigherThan() {
+
+    public void deleteUserIfNotExists() throws UserExistException {
+        UsersRegister regUsers = new UsersRegister();
+        regUsers.addUser(new User("Cosmin", 1960725142591L, 21));
+        regUsers.addUser(new User("Dorel", 1870725142547L, 30));
+        regUsers.addUser(new User("Femeie", 2940515215467L, 23));
+
+
+        try {
+            regUsers.deleteUser(regUsers.getUser(1870725612547L));
+            assertEquals(true,false);
+        } catch (UserNotExistException e) {
+            String result = e.getMessage();
+            Boolean expectedResult = true;
+            Boolean receivedResult = e.getMessage().startsWith("User does not");
+            assertEquals(expectedResult,receivedResult);
+
+        }
+
+    }
+
+    @Test
+    public void getUsersWithAgeHigherThan() throws UserExistException {
         UsersRegister regUsers = new UsersRegister();
         regUsers.addUser(new User("Cosmin", 1960725142591L, 21));
         regUsers.addUser(new User("Dorel", 1870725142547L, 30));
@@ -51,5 +69,28 @@ public class UsersRegisterTest {
         Integer expectedResult = 2;
         Integer actualResult = regUsers.getUsersWithAgeHigherThan(21).size();
         assertEquals(expectedResult,actualResult);
+    }
+
+    @Test
+    public void userDoesntExist() throws UserExistException {
+        UsersRegister regUsers = new UsersRegister();
+        regUsers.addUser(new User("Cosmin", 1960725142591L, 21));
+        regUsers.addUser(new User("Dorel", 1870725142547L, 30));
+        regUsers.addUser(new User("Femeie", 2940515215467L, 23));
+
+        boolean expectedResult = false;
+        boolean actualResult = regUsers.userExist(1960625142591L);
+        assertEquals(expectedResult,actualResult);
+
+    }
+
+    @Test
+    public void addUserAlreadyExists() {
+        
+    }
+
+    @Test
+    public void getInexistentUser()
+    {
     }
 }

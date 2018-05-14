@@ -9,23 +9,22 @@ public class UsersRegister {
 
    Map<Long,User> users = new HashMap<>();
 
-    public void addUser(User user){
+    public void addUser(User user) throws UserExistException {
+        if(userExist(user.getCnp()))
+            throw new UserExistException("User already exists... "+ user);
+
+
         users.put(user.getCnp(), user);
     }
 
-    public User getUser( Long cnp){
-
-//        if(!users.containsKey(cnp))
-//                return null;
+    public User getUser( Long cnp) throws UserNotExistException {
+        if(!userExist(cnp))
+            throw new UserNotExistException("User does not exist!");
 
         return users.get(cnp);
     }
 
-    public void deleteUser (User user) throws UException {
-
-        if(!userExist(user))
-            throw new UException("User does not exist!");
-
+    public void deleteUser (User user) {
         users.remove(user.getCnp());
 
     }
@@ -35,12 +34,10 @@ public class UsersRegister {
         return users.size();
     }
 
-    public boolean userExist(User user)
+    public boolean userExist(Long cnp)
     {
-        if( users.containsKey(user.getCnp()))
-            return TRUE;
+        return users.containsKey(cnp);
 
-        return FALSE;
     }
 
     public Map<Long, User> getUsersWithAgeHigherThan(int age)

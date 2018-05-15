@@ -17,7 +17,6 @@ public class UsersRegisterTest {
 
         assertEquals(expectedUser.toString(),actualUser.toString());
 
-
     }
 
     @Test
@@ -50,9 +49,8 @@ public class UsersRegisterTest {
             regUsers.deleteUser(regUsers.getUser(1870725612547L));
             assertEquals(true,false);
         } catch (UserNotExistException e) {
-            String result = e.getMessage();
-            Boolean expectedResult = true;
-            Boolean receivedResult = e.getMessage().startsWith("User does not");
+            boolean expectedResult = true;
+            boolean receivedResult = e.getMessage().startsWith("User does not exist!");
             assertEquals(expectedResult,receivedResult);
 
         }
@@ -86,7 +84,7 @@ public class UsersRegisterTest {
 
     @Test
     public void addUserAlreadyExists() {
-        
+
     }
 
     @Test
